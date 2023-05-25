@@ -8,7 +8,14 @@ const routes = [
     {
         path: '/',
         name: 'Home',
-        component: () => import('@/components/login/Login')
+        component: () => import('@/components/login/Login'),
+        children: [
+            {
+                path: '/cash_flow',
+                name: 'CashFlow',
+                component: () => import('@/components/cashFlow/Home.vue')
+            }
+        ]
     }
 
 ]
