@@ -6,16 +6,14 @@ import axios from "axios";
 Vue.use(VueRouter)
 const routes = [
     {
-        path: '/',
+        path: '/home',
         name: 'Home',
-        component: () => import('@/components/login/Login'),
-        children: [
-            {
-                path: '/cash_flow',
-                name: 'CashFlow',
-                component: () => import('@/components/cashFlow/Home.vue')
-            }
-        ]
+        component: () => import('@/components/login/Login')
+    },
+    {
+        path: '/cash_flow',
+        name: 'HomeVue',
+        component: () => import('@/components/cashFlow/Home')
     }
 
 ]
@@ -29,7 +27,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     let hasRoute = store.state.menus.hasRoutes
     let token = localStorage.getItem("token")
-    if (to.path === '/login' || to.path === '/captcha' || to.path === '/') {
+    if (to.path === '/login' || to.path === '/captcha' || to.path === '/cash_flow' || to.path === '/') {
         next()
     } else if (!token) {
         next({path: '/login'})
