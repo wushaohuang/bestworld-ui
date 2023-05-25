@@ -1,16 +1,16 @@
 <template>
   <div id="home" class="main-widget">
     <el-row class="report1">
-      <el-col :span="4">
-        <el-date-picker
-            v-model="conditions.report1MonthVersion"
-            type="month"
-            style="width: calc(100% - 15px)"
-            :clearable="false"
-            format="yyyy/MM"
-            value-format="yyyy/MM/dd"
-        ></el-date-picker>
-      </el-col>
+<!--      <el-col :span="4">-->
+<!--        <el-date-picker-->
+<!--            v-model="conditions.report1MonthVersion"-->
+<!--            type="month"-->
+<!--            style="width: calc(100% - 15px)"-->
+<!--            :clearable="false"-->
+<!--            format="yyyy/MM"-->
+<!--            value-format="yyyy/MM/dd"-->
+<!--        ></el-date-picker>-->
+<!--      </el-col>-->
       <el-col :span="6">
         <el-input placeholder="Last Month Residue" v-model="conditions.report1LastMonthResidue" type="number"
                   style="width: calc(100% - 15px); margin-right: 10px">
@@ -18,9 +18,15 @@
         </el-input>
       </el-col>
       <el-col :span="6">
-        <el-input placeholder="Payment Collection" v-model="conditions.report1PaymentCollection" type="number"
+        <el-input placeholder="Payment Collection" v-model="conditions.report1PaymentCollection1" type="number"
                   style="width: calc(100% - 15px); margin-right: 10px">
-          <template v-slot:prepend>Payment Collection</template>
+          <template v-slot:prepend>Payment Collection 1</template>
+        </el-input>
+      </el-col>
+      <el-col :span="6">
+        <el-input placeholder="Payment Collection" v-model="conditions.report1PaymentCollection3" type="number"
+                  style="width: calc(100% - 15px); margin-right: 10px">
+          <template v-slot:prepend>Payment Collection 3</template>
         </el-input>
       </el-col>
       <el-col :span="6">
@@ -29,14 +35,14 @@
           <template v-slot:prepend>Staff Salary</template>
         </el-input>
       </el-col>
-      <el-col :span="1">
-        <el-button type="primary" class="search" icon="el-icon-search" @click="calReport1"></el-button>
-      </el-col>
+<!--      <el-col :span="1">-->
+<!--        <el-button type="primary" class="search" icon="el-icon-search" @click="calReport1"></el-button>-->
+<!--      </el-col>-->
     </el-row>
     <el-row class="report2" style="margin-bottom:  10px">
       <el-col :span="12" style="padding-right: 10px">
         <div style="width: 100%; border: 1px solid #e4e7ed;" :style="{height: pageHeight * 0.5 + 'px'}">
-          <div style="height: calc(100% - 45px); margin-top: 10px">
+          <div style="height: calc(100% - 45px); margin-top: 10px; overflow-y: auto">
             <el-form :model="report2DynamicValidateForm" style="align-items: start;" ref="report2DynamicValidateForm">
               <el-form-item
                   v-for="(domain, index) in report2DynamicValidateForm.domains"
@@ -67,7 +73,7 @@
       </el-col>
       <el-col :span="12" style="padding-right: 10px">
         <div style="width: 100%; border: 1px solid #e4e7ed;" :style="{height: pageHeight * 0.5 + 'px'}">
-          <div style="height: calc(100% - 45px); margin-top: 10px">
+          <div style="height: calc(100% - 45px); margin-top: 10px; overflow-y: auto">
             <el-form :model="report3DynamicValidateForm" style="align-items: start;" ref="report3DynamicValidateForm">
               <el-form-item
                   v-for="(domain, index) in report3DynamicValidateForm.domains"
@@ -189,7 +195,8 @@ export default {
         report3Result: 0,
         report1MonthVersion: '',
         report1StaffSalary: null,
-        report1PaymentCollection: null,
+        report1PaymentCollection1: null,
+        report1PaymentCollection3: null,
         report1LastMonthResidue: null,
         report2Type: '',
         report3Type: '',
@@ -242,7 +249,8 @@ export default {
   methods: {
     calReport1() {
       this.conditions.report1Result = parseFloat(this.conditions.report1LastMonthResidue === null || this.conditions.report1LastMonthResidue === '' ? 0 : this.conditions.report1LastMonthResidue)
-          + parseFloat(this.conditions.report1PaymentCollection === null || this.conditions.report1PaymentCollection === '' ? 0 : this.conditions.report1PaymentCollection)
+          + parseFloat(this.conditions.report1PaymentCollection1 === null || this.conditions.report1PaymentCollection1 === '' ? 0 : this.conditions.report1PaymentCollection1)
+          + parseFloat(this.conditions.report1PaymentCollection3 === null || this.conditions.report1PaymentCollection3 === '' ? 0 : this.conditions.report1PaymentCollection3)
           - parseFloat(this.conditions.report1StaffSalary === null || this.conditions.report1StaffSalary === '' ? 0 : this.conditions.report1StaffSalary)
     },
     calReport2() {
