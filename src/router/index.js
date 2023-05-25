@@ -6,9 +6,9 @@ import axios from "axios";
 Vue.use(VueRouter)
 const routes = [
     {
-        path: '/home',
-        name: 'Home',
-        component: () => import('@/components/login/Login')
+        path: '/',
+        name: 'HomeVue',
+        component: () => import('@/components/cashFlow/Home')
     },
     {
         path: '/cash_flow',
