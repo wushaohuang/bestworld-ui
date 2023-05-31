@@ -5,7 +5,7 @@ import Element from "element-ui";
 const request = axios.create({
     timeout: 5000,
     headers: {
-        'Content-Type': "application/json; charset=utf-8"
+        'Content-Type': "application/json;charset=UTF-8"
     }
 })
 

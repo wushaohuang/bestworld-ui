@@ -37,9 +37,10 @@
       <el-col :span="12" style="padding-right: 10px">
         <div style="width: 100%; border: 1px solid #e4e7ed;" :style="{height: pageHeight * 0.5 + 'px'}">
           <div style="height: calc(100% - 45px); margin-top: 10px">
-            <el-form :model="report2DynamicValidateForm" style="align-items: start;" ref="report2DynamicValidateForm">
+            <el-form :model="conditions.report2DynamicValidateForm" style="align-items: start;"
+                     ref="report2DynamicValidateForm">
               <el-form-item
-                  v-for="(domain, index) in report2DynamicValidateForm.domains"
+                  v-for="(domain, index) in conditions.report2DynamicValidateForm.domains"
                   style="margin-bottom: 10px"
                   :key="domain.key"
                   :prop="'domains.' + index + '.value'">
@@ -68,9 +69,10 @@
       <el-col :span="12" style="padding-right: 10px">
         <div style="width: 100%; border: 1px solid #e4e7ed;" :style="{height: pageHeight * 0.5 + 'px'}">
           <div style="height: calc(100% - 45px); margin-top: 10px">
-            <el-form :model="report3DynamicValidateForm" style="align-items: start;" ref="report3DynamicValidateForm">
+            <el-form :model="conditions.report3DynamicValidateForm" style="align-items: start;"
+                     ref="report3DynamicValidateForm">
               <el-form-item
-                  v-for="(domain, index) in report3DynamicValidateForm.domains"
+                  v-for="(domain, index) in conditions.report3DynamicValidateForm.domains"
                   style="margin-bottom: 10px"
                   :key="domain.key"
                   :prop="'domains.' + index + '.value'">
@@ -141,17 +143,32 @@
         </el-col>
       </div>
     </el-row>
+    <el-row>
+      <el-select v-model="conditions.report4Type" placeholder="group by...">
+        <el-option v-for="item in ['VERSION', 'FEE_TYPE', 'FEE_NAME', 'FEE_PRICE']"
+                   :key="item"
+                   :label="item"
+                   :value="item"/>
+      </el-select>
+      <div class="report4"
+           style="height:100%;   position: relative;  padding: 5px; border: 1px solid #e9e9e9; box-shadow: 0 0 2px 2px #f8f8f8; background-color: white;">
+        <chart ref="chartRef" style="width: calc(100% - 45px); height:400px" :option="_report4Options"/>
+      </div>
+    </el-row>
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'HomeVue',
   props: {
     msg: String
   },
   mounted() {
+    this.calculateCashFlow()
+    this.saveCashFlow()
+    this.queryReport4()
+
     function $dateFormatter(date, fmt) {
       const o = {
         'M+': date.getMonth() + 1, // 月份
@@ -184,36 +201,135 @@ export default {
       pageHeight: '',
       pageWidth: '',
       conditions: {
+        report4Type: 'VERSION',
         report1Result: 0,
         report2Result: 0,
         report3Result: 0,
-        report1MonthVersion: '',
-        report1StaffSalary: null,
-        report1PaymentCollection: null,
-        report1LastMonthResidue: null,
+        report1MonthVersion: '2023',
+        report1StaffSalary: 0,
+        report1PaymentCollection: 0,
+        report1LastMonthResidue: 0,
         report2Type: '',
         report3Type: '',
-        calResult: 0
-      },
-      report2DynamicValidateForm: {
-        domains: [{
-          type: '',
-          name: '',
-          value: ''
-        }]
-      },
-      report3DynamicValidateForm: {
-        domains: [{
-          type: '',
-          name: '',
-          value: ''
-        }]
+        calResult: 0,
+        report2DynamicValidateForm: {
+          domains: [{
+            type: 'left',
+            name: '我是左边的',
+            value: 123
+          }]
+        },
+        report3DynamicValidateForm: {
+          domains: [{
+            type: 'right',
+            name: '我是右边的',
+            value: 999
+          }]
+        }
       }
     }
   },
   computed: {
     _totalResult() {
       return this.conditions.report1Result - this.conditions.report2Result - this.conditions.report3Result
+    },
+    _report4Options() {
+      return {
+        title: {
+          text: 'Cash Flow Trend'
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
+        legend: {
+          data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            boundaryGap: false,
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value'
+          }
+        ],
+        series: [
+          {
+            name: 'Email',
+            type: 'line',
+            stack: 'Total',
+            areaStyle: {},
+            emphasis: {
+              focus: 'series'
+            },
+            data: [120, 132, 101, 134, 90, 230, 210]
+          },
+          {
+            name: 'Union Ads',
+            type: 'line',
+            stack: 'Total',
+            areaStyle: {},
+            emphasis: {
+              focus: 'series'
+            },
+            data: [220, 182, 191, 234, 290, 330, 310]
+          },
+          {
+            name: 'Video Ads',
+            type: 'line',
+            stack: 'Total',
+            areaStyle: {},
+            emphasis: {
+              focus: 'series'
+            },
+            data: [150, 232, 201, 154, 190, 330, 410]
+          },
+          {
+            name: 'Direct',
+            type: 'line',
+            stack: 'Total',
+            areaStyle: {},
+            emphasis: {
+              focus: 'series'
+            },
+            data: [320, 332, 301, 334, 390, 330, 320]
+          },
+          {
+            name: 'Search Engine',
+            type: 'line',
+            stack: 'Total',
+            label: {
+              show: true,
+              position: 'top'
+            },
+            areaStyle: {},
+            emphasis: {
+              focus: 'series'
+            },
+            data: [820, 932, 901, 934, 1290, 1330, 1320]
+          }
+        ]
+      }
     }
   },
   watch: {
@@ -247,30 +363,53 @@ export default {
     },
     calReport2() {
       this.conditions.report2Result = 0
-      for (let i = 0; i < this.report2DynamicValidateForm.domains.length; i++) {
-        if (this.report2DynamicValidateForm.domains[i].value) {
-          this.conditions.report2Result += parseFloat(this.report2DynamicValidateForm.domains[i].value)
+      for (let i = 0; i < this.conditions.report2DynamicValidateForm.domains.length; i++) {
+        if (this.conditions.report2DynamicValidateForm.domains[i].value) {
+          this.conditions.report2Result += parseFloat(this.conditions.report2DynamicValidateForm.domains[i].value)
         }
       }
     },
     calReport3() {
       this.conditions.report3Result = 0
-      for (let i = 0; i < this.report3DynamicValidateForm.domains.length; i++) {
-        if (this.report3DynamicValidateForm.domains[i].value) {
-          this.conditions.report3Result += parseFloat(this.report3DynamicValidateForm.domains[i].value)
+      for (let i = 0; i < this.conditions.report3DynamicValidateForm.domains.length; i++) {
+        if (this.conditions.report3DynamicValidateForm.domains[i].value) {
+          this.conditions.report3Result += parseFloat(this.conditions.report3DynamicValidateForm.domains[i].value)
         }
       }
     },
-    // calculateCashFlow() {
-    //   this.$axios.get('/calculate_cash_flow/report1').then(res => {
-    //     this.conditions.calResult = res.data
-    //   })
-    // },
+    calculateCashFlow() {
+      this.$axios({
+        method: 'post',
+        url: '/calculation_cash_flow',
+        data: this.conditions
+      }).then(res => {
+        this.conditions.calResult = res.data
+      })
+    },
+    saveCashFlow() {
+      this.$axios({
+        method: 'post',
+        url: '/save_cash_flow',
+        data: this.conditions
+      }).then(res => {
+        console.log(res)
+        console.log('finish')
+      })
+    },
+    queryReport4() {
+      this.$axios({
+        method: 'post',
+        url: '/report4',
+        data: this.conditions
+      }).then(res => {
+        console.log(res)
+        console.log('finish')
+      })
+    },
     report2SubmitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.calReport2();
-          console.log(this.report2DynamicValidateForm)
         } else {
           console.log('error submit!!');
           return false;
@@ -294,25 +433,25 @@ export default {
       this.$refs[formName].resetFields();
     },
     report2RemoveDomain(item) {
-      var index = this.report2DynamicValidateForm.domains.indexOf(item)
+      var index = this.conditions.report2DynamicValidateForm.domains.indexOf(item)
       if (index !== -1) {
-        this.report2DynamicValidateForm.domains.splice(index, 1)
+        this.conditions.report2DynamicValidateForm.domains.splice(index, 1)
       }
     },
     report3RemoveDomain(item) {
-      var index = this.report3DynamicValidateForm.domains.indexOf(item)
+      var index = this.conditions.report3DynamicValidateForm.domains.indexOf(item)
       if (index !== -1) {
-        this.report3DynamicValidateForm.domains.splice(index, 1)
+        this.conditions.report3DynamicValidateForm.domains.splice(index, 1)
       }
     },
     report2AddDomain() {
-      this.report2DynamicValidateForm.domains.push({
+      this.conditions.report2DynamicValidateForm.domains.push({
         value: '',
         key: Date.now()
       });
     },
     report3AddDomain() {
-      this.report3DynamicValidateForm.domains.push({
+      this.conditions.report3DynamicValidateForm.domains.push({
         value: '',
         key: Date.now()
       });
@@ -358,6 +497,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 10px;
   }
 
 }
