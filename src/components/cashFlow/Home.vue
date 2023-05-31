@@ -492,7 +492,6 @@ export default {
     padding: 8px 12px;
     font-size: 12px;
   }
-
   .report3 {
     display: flex;
     justify-content: center;
