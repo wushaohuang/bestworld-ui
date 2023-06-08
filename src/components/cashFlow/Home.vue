@@ -211,8 +211,6 @@ export default {
         report1StaffSalary: 0,
         report1PaymentCollection: 0,
         report1LastMonthResidue: 0,
-        report2Type: '',
-        report3Type: '',
         calResult: 0,
         report2DynamicValidateForm: {
           domains: [{
