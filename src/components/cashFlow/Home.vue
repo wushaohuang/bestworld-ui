@@ -30,7 +30,7 @@
         </el-input>
       </el-col>
       <el-col :span="1">
-        <el-button type="primary" class="search" icon="el-icon-search" @click="calReport1"></el-button>
+        <el-button type="primary" class="search" icon="el-icon-s-promotion" @click="saveCashFlow"></el-button>
       </el-col>
     </el-row>
     <el-row class="report2" style="margin-bottom:  10px">
@@ -166,7 +166,6 @@ export default {
   },
   mounted() {
     this.calculateCashFlow()
-    this.saveCashFlow()
     this.queryReport4()
 
     function $dateFormatter(date, fmt) {
@@ -195,8 +194,6 @@ export default {
   },
   data() {
     return {
-      like: true,
-      value1: 4154.564,
       title: 'Cal Result',
       pageHeight: '',
       pageWidth: '',
@@ -219,16 +216,16 @@ export default {
         calResult: 0,
         report2DynamicValidateForm: {
           domains: [{
-            type: 'left',
-            name: '我是左边的',
-            value: 123
+            type: '',
+            name: '',
+            value: 0
           }]
         },
         report3DynamicValidateForm: {
           domains: [{
-            type: 'right',
-            name: '我是右边的',
-            value: 999
+            type: '',
+            name: '',
+            value: 0
           }]
         }
       }
@@ -349,7 +346,7 @@ export default {
     queryReport4() {
       this.$axios({
         method: 'post',
-        url: '/report4',
+        url: '/query_report4',
         data: this.conditions
       }).then(res => {
         console.log(res)
@@ -442,6 +439,7 @@ export default {
     padding: 8px 12px;
     font-size: 12px;
   }
+
   .report3 {
     display: flex;
     justify-content: center;
