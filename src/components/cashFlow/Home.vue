@@ -3,15 +3,21 @@
     <h1>Calculate Cash Flow</h1>
     <div style="border: 1px solid #e9e9e9; box-shadow: 0 0 2px 2px #f8f8f8; padding: 10px">
       <el-row class="report1">
-        <el-col :span="4">
-          <el-date-picker
-              v-model="conditions.report1MonthVersion"
-              type="month"
-              style="width: calc(100% - 15px)"
-              :clearable="false"
-              format="yyyy/MM"
-              value-format="yyyy/MM/dd"
-          ></el-date-picker>
+<!--        <el-col :span="4">-->
+<!--          <el-date-picker-->
+<!--              v-model="conditions.report1MonthVersion"-->
+<!--              type="month"-->
+<!--              style="width: calc(100% - 15px)"-->
+<!--              :clearable="false"-->
+<!--              format="yyyy/MM"-->
+<!--              value-format="yyyy/MM/dd"-->
+<!--          ></el-date-picker>-->
+<!--        </el-col>-->
+        <el-col :span="6">
+          <el-input placeholder="Version" v-model="conditions.report1Version" type="text"
+                    style="width: calc(100% - 15px); margin-right: 10px">
+            <template v-slot:prepend>Version</template>
+          </el-input>
         </el-col>
         <el-col :span="6">
           <el-input placeholder="Last Month Residue" v-model="conditions.report1LastMonthResidue" type="number"
@@ -25,7 +31,7 @@
             <template v-slot:prepend>Payment Collection</template>
           </el-input>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="4">
           <el-input placeholder="Staff Salary" v-model="conditions.report1StaffSalary" type="number"
                     style="width: calc(100% - 15px); margin-right: 10px">
             <template v-slot:prepend>Staff Salary</template>
@@ -197,9 +203,8 @@ export default {
       }
       return fmt
     }
-
     const now = new Date()
-    this.conditions.report1MonthVersion = $dateFormatter(now, 'yyyy/MM/dd')
+    this.conditions.report1Version = $dateFormatter(now, 'yyyy-MM-dd hh:mm:ss')
     this.pageWidth = document.documentElement.clientWidth
     this.pageHeight = document.documentElement.clientHeight
   },
@@ -218,7 +223,7 @@ export default {
         report1Result: 0,
         report2Result: 0,
         report3Result: 0,
-        report1MonthVersion: '2023',
+        report1Version: '',
         report1StaffSalary: 0,
         report1PaymentCollection: 0,
         report1LastMonthResidue: 0,
@@ -268,6 +273,7 @@ export default {
       }
       return {
         title: {
+          left: 'center',
           text: 'Cash Flow Trend'
         },
         tooltip: {
@@ -280,7 +286,10 @@ export default {
           }
         },
         legend: {
-          data: this.report4Data.legend
+          data: this.report4Data.legend,
+          type: 'scroll',
+          bottom: 10,
+          padding: [0, 0, 25, 0]
         },
         toolbox: {
           feature: {
@@ -319,14 +328,12 @@ export default {
     report2DynamicValidateForm: {
       deep: true,
       handler: function () {
-        console.log(1)
         this.calReport2()
       }
     },
     report3DynamicValidateForm: {
       deep: true,
       handler: function () {
-        console.log(1)
         this.calReport3()
       }
     }
