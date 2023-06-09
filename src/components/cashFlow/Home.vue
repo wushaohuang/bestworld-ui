@@ -175,9 +175,6 @@
 <script>
 export default {
   name: 'HomeVue',
-  props: {
-    msg: String
-  },
   mounted() {
     this.calculateCashFlow()
     this.queryReport4()
