@@ -1,6 +1,6 @@
 <template>
   <div id="home" class="main-widget">
-    <el-row class="report1">
+    <el-row v-show="false" class="report1">
       <el-col :span="4">
         <el-date-picker
             v-model="conditions.report1MonthVersion"
@@ -33,7 +33,7 @@
         <el-button type="primary" class="search" icon="el-icon-s-promotion" @click="saveCashFlow"></el-button>
       </el-col>
     </el-row>
-    <el-row class="report2" style="margin-bottom:  10px">
+    <el-row v-show="false" class="report2" style="margin-bottom:  10px">
       <el-col :span="12" style="padding-right: 10px">
         <div style="width: 100%; border: 1px solid #e4e7ed;" :style="{height: pageHeight * 0.5 + 'px'}">
           <div style="height: calc(100% - 45px); margin-top: 10px">
@@ -99,7 +99,7 @@
         </div>
       </el-col>
     </el-row>
-    <el-row>
+    <el-row v-show="false">
       <div class="report3" style="width: 100%; border: 1px solid #e4e7ed; height: 100px">
         <el-col :span="6">
           <div>
@@ -144,7 +144,7 @@
       </div>
     </el-row>
     <el-row>
-      <el-select v-model="conditions.report4Type" placeholder="group by...">
+      <el-select v-show="false" v-model="conditions.report4Type" placeholder="group by...">
         <el-option v-for="item in ['VERSION', 'FEE_TYPE', 'FEE_NAME', 'FEE_PRICE']"
                    :key="item"
                    :label="item"
@@ -234,9 +234,31 @@ export default {
       return this.conditions.report1Result - this.conditions.report2Result - this.conditions.report3Result
     },
     _report4Options() {
+      let tempData = []
+      for (let item in this.report4Data.data) {
+        let name = Object.keys(this.report4Data.data[item])[0]
+        item = Object.values(this.report4Data.data[item])
+        let temp = {}
+        temp.type = 'line'
+        temp.stack = 'Total'
+        temp.areaStyle = {}
+        temp.emphasis = {
+          focus: 'series'
+        }
+        temp.name = name
+        const dataList = []
+        for (let i = 0; i < item[0].length; i++) {
+          for (const j in item[0][i].data) {
+            dataList.push(j)
+          }
+        }
+        temp.data = dataList
+        tempData.push(temp)
+      }
       return {
         title: {
-          text: 'Cash Flow Trend'
+          // text: 'Cash Flow Trend'
+          text: 'dddd'
         },
         tooltip: {
           trigger: 'axis',
@@ -273,7 +295,7 @@ export default {
             type: 'value'
           }
         ],
-        series: this.report4Data.data
+        series: tempData
       }
     }
   },
@@ -281,7 +303,6 @@ export default {
     conditions: {
       deep: true,
       handler: function () {
-        console.log(1)
         this.calReport1()
       }
     },
@@ -338,7 +359,6 @@ export default {
         data: this.conditions
       }).then(res => {
         console.log(res)
-        console.log('finish')
       })
     },
     queryReport4() {
@@ -347,7 +367,6 @@ export default {
         url: '/query_report4',
         data: this.conditions
       }).then(res => {
-        console.log(res)
         this.report4Data = res.data.data
       })
     },
