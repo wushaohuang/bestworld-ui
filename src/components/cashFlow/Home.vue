@@ -1,160 +1,174 @@
 <template>
   <div id="home" class="main-widget">
-    <el-row v-show="false" class="report1">
-      <el-col :span="4">
-        <el-date-picker
-            v-model="conditions.report1MonthVersion"
-            type="month"
-            style="width: calc(100% - 15px)"
-            :clearable="false"
-            format="yyyy/MM"
-            value-format="yyyy/MM/dd"
-        ></el-date-picker>
-      </el-col>
-      <el-col :span="6">
-        <el-input placeholder="Last Month Residue" v-model="conditions.report1LastMonthResidue" type="number"
-                  style="width: calc(100% - 15px); margin-right: 10px">
-          <template v-slot:prepend>Last Month Residue</template>
-        </el-input>
-      </el-col>
-      <el-col :span="6">
-        <el-input placeholder="Payment Collection" v-model="conditions.report1PaymentCollection" type="number"
-                  style="width: calc(100% - 15px); margin-right: 10px">
-          <template v-slot:prepend>Payment Collection</template>
-        </el-input>
-      </el-col>
-      <el-col :span="6">
-        <el-input placeholder="Staff Salary" v-model="conditions.report1StaffSalary" type="number"
-                  style="width: calc(100% - 15px); margin-right: 10px">
-          <template v-slot:prepend>Staff Salary</template>
-        </el-input>
-      </el-col>
-      <el-col :span="1">
-        <el-button type="primary" class="search" icon="el-icon-s-promotion" @click="saveCashFlow"></el-button>
-      </el-col>
-    </el-row>
-    <el-row v-show="false" class="report2" style="margin-bottom:  10px">
-      <el-col :span="12" style="padding-right: 10px">
-        <div style="width: 100%; border: 1px solid #e4e7ed;" :style="{height: pageHeight * 0.5 + 'px'}">
-          <div style="height: calc(100% - 45px); margin-top: 10px">
-            <el-form :model="conditions.report2DynamicValidateForm" style="align-items: start;"
-                     ref="report2DynamicValidateForm">
-              <el-form-item
-                  v-for="(domain, index) in conditions.report2DynamicValidateForm.domains"
-                  style="margin-bottom: 10px"
-                  :key="domain.key"
-                  :prop="'domains.' + index + '.value'">
-                <el-select v-model="domain.type" style="border: none; !important;">
-                  <el-option label="RAPID_SEA" value="RAPID_SEA"></el-option>
-                  <el-option label="SLOW_SEA" value="SLOW_SEA"></el-option>
-                  <el-option label="DRAGON_BOAT" value="DRAGON_BOAT"></el-option>
-                </el-select>
-                <el-input :style="{width: pageWidth * 0.1 + 'px'}"
-                          style="border: none; !important; margin-left: 10px !important;"
-                          v-model="domain.name" placeholder="item"></el-input>
-                <el-input :style="{width: pageWidth * 0.1 + 'px'}" style="border: none; margin-left: 10px !important;"
-                          v-model="domain.value" placeholder="value"></el-input>
-                <el-button style="margin-left: 10px !important;" @click="report2AddDomain"> +</el-button>
-                <el-button style="margin-left: 10px !important;" @click.prevent="report2RemoveDomain(domain)"> -
-                </el-button>
-              </el-form-item>
-            </el-form>
+    <h1>Calculate Cash Flow</h1>
+    <div style="border: 1px solid #e9e9e9; box-shadow: 0 0 2px 2px #f8f8f8; padding: 10px">
+      <el-row class="report1">
+        <el-col :span="4">
+          <el-date-picker
+              v-model="conditions.report1MonthVersion"
+              type="month"
+              style="width: calc(100% - 15px)"
+              :clearable="false"
+              format="yyyy/MM"
+              value-format="yyyy/MM/dd"
+          ></el-date-picker>
+        </el-col>
+        <el-col :span="6">
+          <el-input placeholder="Last Month Residue" v-model="conditions.report1LastMonthResidue" type="number"
+                    style="width: calc(100% - 15px); margin-right: 10px">
+            <template v-slot:prepend>Last Month Residue</template>
+          </el-input>
+        </el-col>
+        <el-col :span="6">
+          <el-input placeholder="Payment Collection" v-model="conditions.report1PaymentCollection" type="number"
+                    style="width: calc(100% - 15px); margin-right: 10px">
+            <template v-slot:prepend>Payment Collection</template>
+          </el-input>
+        </el-col>
+        <el-col :span="6">
+          <el-input placeholder="Staff Salary" v-model="conditions.report1StaffSalary" type="number"
+                    style="width: calc(100% - 15px); margin-right: 10px">
+            <template v-slot:prepend>Staff Salary</template>
+          </el-input>
+        </el-col>
+        <el-col :span="1">
+          <el-button type="primary" class="search" icon="el-icon-s-promotion" @click="saveCashFlow"></el-button>
+        </el-col>
+      </el-row>
+      <el-row class="report2" style="margin-bottom:  10px">
+        <el-col :span="12" style="padding-right: 10px">
+          <div style="width: 100%; border: 1px solid #e4e7ed;" :style="{height: pageHeight * 0.5 + 'px'}">
+            <div style="height: calc(100% - 45px); margin-top: 10px">
+              <el-form :model="conditions.report2DynamicValidateForm" style="align-items: start;"
+                       ref="report2DynamicValidateForm">
+                <el-form-item
+                    v-for="(domain, index) in conditions.report2DynamicValidateForm.domains"
+                    style="margin-bottom: 10px"
+                    :key="domain.key"
+                    :prop="'domains.' + index + '.value'">
+                  <el-select v-model="domain.type" style="border: none; !important;">
+                    <el-option label="RAPID_SEA" value="RAPID_SEA"></el-option>
+                    <el-option label="SLOW_SEA" value="SLOW_SEA"></el-option>
+                    <el-option label="DRAGON_BOAT" value="DRAGON_BOAT"></el-option>
+                  </el-select>
+                  <el-input :style="{width: pageWidth * 0.1 + 'px'}"
+                            style="border: none; !important; margin-left: 10px !important;"
+                            v-model="domain.name" placeholder="item"></el-input>
+                  <el-input :style="{width: pageWidth * 0.1 + 'px'}" style="border: none; margin-left: 10px !important;"
+                            v-model="domain.value" placeholder="value"></el-input>
+                  <el-button style="margin-left: 10px !important;" @click="report2AddDomain"> +</el-button>
+                  <el-button style="margin-left: 10px !important;" @click.prevent="report2RemoveDomain(domain)"> -
+                  </el-button>
+                </el-form-item>
+              </el-form>
+            </div>
+            <div style="height: 10px; float: right; margin-right: 10px">
+              <el-button type="primary" @click="report2SubmitForm('report2DynamicValidateForm')">计算</el-button>
+              <el-button @click="report2ResetForm('report2DynamicValidateForm')">重置</el-button>
+            </div>
           </div>
-          <div style="height: 10px; float: right; margin-right: 10px">
-            <el-button type="primary" @click="report2SubmitForm('report2DynamicValidateForm')">计算</el-button>
-            <el-button @click="report2ResetForm('report2DynamicValidateForm')">重置</el-button>
+        </el-col>
+        <el-col :span="12">
+          <div style="width: 100%; border: 1px solid #e4e7ed;" :style="{height: pageHeight * 0.5 + 'px'}">
+            <div style="height: calc(100% - 45px); margin-top: 10px">
+              <el-form :model="conditions.report3DynamicValidateForm" style="align-items: start;"
+                       ref="report3DynamicValidateForm">
+                <el-form-item
+                    v-for="(domain, index) in conditions.report3DynamicValidateForm.domains"
+                    style="margin-bottom: 10px"
+                    :key="domain.key"
+                    :prop="'domains.' + index + '.value'">
+                  <el-select v-model="domain.type" style="border: none; !important;">
+                    <el-option label="RAPID_SEA" value="RAPID_SEA"></el-option>
+                    <el-option label="SLOW_SEA" value="SLOW_SEA"></el-option>
+                    <el-option label="DRAGON_BOAT" value="DRAGON_BOAT"></el-option>
+                  </el-select>
+                  <el-input :style="{width: pageWidth * 0.1 + 'px'}"
+                            style="border: none; !important; margin-left: 10px !important;"
+                            v-model="domain.name" placeholder="item"></el-input>
+                  <el-input :style="{width: pageWidth * 0.1 + 'px'}" style="border: none; margin-left: 10px !important;"
+                            v-model="domain.value" placeholder="value"></el-input>
+                  <el-button style="margin-left: 10px !important;" @click="report3AddDomain"> +</el-button>
+                  <el-button style="margin-left: 10px !important;" @click.prevent="report3RemoveDomain(domain)"> -
+                  </el-button>
+                </el-form-item>
+              </el-form>
+            </div>
+            <div style="height: 10px; float: right; margin-right: 10px">
+              <el-button type="primary" @click="report3SubmitForm('report3DynamicValidateForm')">计算</el-button>
+              <el-button @click="report3ResetForm('report3DynamicValidateForm')">重置</el-button>
+            </div>
           </div>
+        </el-col>
+      </el-row>
+      <el-row>
+        <div class="report3" style="width: 100%; border: 1px solid #e4e7ed; height: 100px">
+          <el-col :span="6">
+            <div>
+              <el-statistic group-separator="," :precision="2" :value="conditions.report1Result"
+                            title="Report1Result">
+                <template v-slot:suffix>
+                  <i class="el-icon-star-on" style="color:red"></i>
+                </template>
+              </el-statistic>
+            </div>
+          </el-col>
+          <el-col :span="6">
+            <div>
+              <el-statistic :value="conditions.report2Result" title="Report2Result">
+                <template v-slot:suffix>
+                  <i class="el-icon-star-on" style="color:red"></i>
+                </template>
+              </el-statistic>
+            </div>
+          </el-col>
+          <el-col :span="6">
+            <div>
+              <el-statistic :value="conditions.report3Result" title="Report3Result">
+                <template v-slot:suffix>
+                  <i class="el-icon-star-on" style="color:red"></i>
+                </template>
+              </el-statistic>
+            </div>
+          </el-col>
+          <el-col :span="6">
+            <div>
+              <el-statistic group-separator="," :precision="2" decimal-separator="." :value="_totalResult"
+                            :title="title">
+                <template v-slot:prefix>
+                  <i class="el-icon-s-flag" style="color: red"></i>
+                </template>
+                <template v-slot:suffix>
+                  <i class="el-icon-s-flag" style="color: blue"></i>
+                </template>
+              </el-statistic>
+            </div>
+          </el-col>
         </div>
-      </el-col>
-      <el-col :span="12" style="padding-right: 10px">
-        <div style="width: 100%; border: 1px solid #e4e7ed;" :style="{height: pageHeight * 0.5 + 'px'}">
-          <div style="height: calc(100% - 45px); margin-top: 10px">
-            <el-form :model="conditions.report3DynamicValidateForm" style="align-items: start;"
-                     ref="report3DynamicValidateForm">
-              <el-form-item
-                  v-for="(domain, index) in conditions.report3DynamicValidateForm.domains"
-                  style="margin-bottom: 10px"
-                  :key="domain.key"
-                  :prop="'domains.' + index + '.value'">
-                <el-select v-model="domain.type" style="border: none; !important;">
-                  <el-option label="RAPID_SEA" value="RAPID_SEA"></el-option>
-                  <el-option label="SLOW_SEA" value="SLOW_SEA"></el-option>
-                  <el-option label="DRAGON_BOAT" value="DRAGON_BOAT"></el-option>
-                </el-select>
-                <el-input :style="{width: pageWidth * 0.1 + 'px'}"
-                          style="border: none; !important; margin-left: 10px !important;"
-                          v-model="domain.name" placeholder="item"></el-input>
-                <el-input :style="{width: pageWidth * 0.1 + 'px'}" style="border: none; margin-left: 10px !important;"
-                          v-model="domain.value" placeholder="value"></el-input>
-                <el-button style="margin-left: 10px !important;" @click="report3AddDomain"> +</el-button>
-                <el-button style="margin-left: 10px !important;" @click.prevent="report3RemoveDomain(domain)"> -
-                </el-button>
-              </el-form-item>
-            </el-form>
+      </el-row>
+      <div style="border: 1px solid #e9e9e9; box-shadow: 0 0 2px 2px #f8f8f8; padding: 10px">
+        <el-row>
+          <div class="report3" style="width: 100%; border: 1px solid #e4e7ed; padding: 10px 0">
+            <el-col :span="4">
+              <el-select v-model="conditions.report4Type" placeholder="group by...">
+                <el-option v-for="item in ['VERSION', 'FEE_TYPE', 'FEE_NAME', 'FEE_PRICE']"
+                           :key="item"
+                           :label="item"
+                           :value="item"/>
+              </el-select>
+            </el-col>
+            <el-col :span="1">
+              <el-button type="primary" class="search" icon="el-icon-search" @click="queryReport4"></el-button>
+            </el-col>
+            <el-col :span="18"></el-col>
           </div>
-          <div style="height: 10px; float: right; margin-right: 10px">
-            <el-button type="primary" @click="report3SubmitForm('report3DynamicValidateForm')">计算</el-button>
-            <el-button @click="report3ResetForm('report3DynamicValidateForm')">重置</el-button>
-          </div>
+        </el-row>
+        <div class="report4"
+             style="height:100%; position: relative;  padding: 5px; border: 1px solid #e9e9e9; box-shadow: 0 0 2px 2px #f8f8f8; background-color: white;">
+          <chart ref="chartRef" style="width: calc(100% - 45px); height:400px" :option="_report4Options"/>
         </div>
-      </el-col>
-    </el-row>
-    <el-row v-show="false">
-      <div class="report3" style="width: 100%; border: 1px solid #e4e7ed; height: 100px">
-        <el-col :span="6">
-          <div>
-            <el-statistic group-separator="," :precision="2" :value="conditions.report1Result"
-                          title="Report1Result">
-              <template v-slot:suffix>
-                <i class="el-icon-star-on" style="color:red"></i>
-              </template>
-            </el-statistic>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div>
-            <el-statistic :value="conditions.report2Result" title="Report2Result">
-              <template v-slot:suffix>
-                <i class="el-icon-star-on" style="color:red"></i>
-              </template>
-            </el-statistic>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div>
-            <el-statistic :value="conditions.report3Result" title="Report3Result">
-              <template v-slot:suffix>
-                <i class="el-icon-star-on" style="color:red"></i>
-              </template>
-            </el-statistic>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div>
-            <el-statistic group-separator="," :precision="2" decimal-separator="." :value="_totalResult" :title="title">
-              <template v-slot:prefix>
-                <i class="el-icon-s-flag" style="color: red"></i>
-              </template>
-              <template v-slot:suffix>
-                <i class="el-icon-s-flag" style="color: blue"></i>
-              </template>
-            </el-statistic>
-          </div>
-        </el-col>
       </div>
-    </el-row>
-    <el-row>
-      <el-select v-show="false" v-model="conditions.report4Type" placeholder="group by...">
-        <el-option v-for="item in ['VERSION', 'FEE_TYPE', 'FEE_NAME', 'FEE_PRICE']"
-                   :key="item"
-                   :label="item"
-                   :value="item"/>
-      </el-select>
-      <div class="report4"
-           style="height:100%;   position: relative;  padding: 5px; border: 1px solid #e9e9e9; box-shadow: 0 0 2px 2px #f8f8f8; background-color: white;">
-        <chart ref="chartRef" style="width: calc(100% - 45px); height:400px" :option="_report4Options"/>
-      </div>
-    </el-row>
+    </div>
   </div>
 </template>
 
@@ -257,8 +271,7 @@ export default {
       }
       return {
         title: {
-          // text: 'Cash Flow Trend'
-          text: 'dddd'
+          text: 'Cash Flow Trend'
         },
         tooltip: {
           trigger: 'axis',
