@@ -14,8 +14,12 @@ const routes = [
         path: '/cash_flow',
         name: 'HomeVue',
         component: () => import('@/components/cashFlow/Home')
+    },
+    {
+        path: '/gpt',
+        name: 'GptVue',
+        component: () => import('@/components/gpt/Gpt')
     }
-
 ]
 
 const router = new VueRouter({
@@ -27,7 +31,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     let hasRoute = store.state.menus.hasRoutes
     let token = localStorage.getItem("token")
-    if (to.path === '/login' || to.path === '/captcha' || to.path === '/cash_flow' || to.path === '/') {
+    if (to.path === '/login' || to.path === '/captcha' || to.path === '/cash_flow' || to.path === '/' || to.path === '/gpt') {
         next()
     } else if (!token) {
         next({path: '/login'})

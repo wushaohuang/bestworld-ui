@@ -16,25 +16,25 @@
         <el-col :span="6">
           <el-input placeholder="Version" v-model="conditions.report1Version" type="text"
                     style="width: calc(100% - 15px); margin-right: 10px">
-            <template v-slot:prepend>Version</template>
+            <template v-slot:prepend>版本</template>
           </el-input>
         </el-col>
         <el-col :span="6">
-          <el-input placeholder="Last Month Residue" v-model="conditions.report1LastMonthResidue" type="number"
+          <el-input placeholder="上月余额" v-model="conditions.report1LastMonthResidue" type="number"
                     style="width: calc(100% - 15px); margin-right: 10px">
-            <template v-slot:prepend>Last Month Residue</template>
+            <template v-slot:prepend>上月余额</template>
           </el-input>
         </el-col>
         <el-col :span="6">
-          <el-input placeholder="Payment Collection" v-model="conditions.report1PaymentCollection" type="number"
+          <el-input placeholder="回款" v-model="conditions.report1PaymentCollection" type="number"
                     style="width: calc(100% - 15px); margin-right: 10px">
-            <template v-slot:prepend>Payment Collection</template>
+            <template v-slot:prepend>回款</template>
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-input placeholder="Staff Salary" v-model="conditions.report1StaffSalary" type="number"
+          <el-input placeholder="公司均摊" v-model="conditions.report1StaffSalary" type="number"
                     style="width: calc(100% - 15px); margin-right: 10px">
-            <template v-slot:prepend>Staff Salary</template>
+            <template v-slot:prepend>公司均摊</template>
           </el-input>
         </el-col>
         <el-col :span="1">
@@ -53,9 +53,9 @@
                     :key="domain.key"
                     :prop="'domains.' + index + '.value'">
                   <el-select v-model="domain.type" style="border: none; !important;">
-                    <el-option label="RAPID_SEA" value="RAPID_SEA"></el-option>
-                    <el-option label="SLOW_SEA" value="SLOW_SEA"></el-option>
-                    <el-option label="DRAGON_BOAT" value="DRAGON_BOAT"></el-option>
+                    <el-option label="快海" value="RAPID_SEA"></el-option>
+                    <el-option label="慢海" value="SLOW_SEA"></el-option>
+                    <el-option label="龙舟" value="DRAGON_BOAT"></el-option>
                   </el-select>
                   <el-input :style="{width: pageWidth * 0.1 + 'px'}"
                             style="border: none; !important; margin-left: 10px !important;"
@@ -85,9 +85,8 @@
                     :key="domain.key"
                     :prop="'domains.' + index + '.value'">
                   <el-select v-model="domain.type" style="border: none; !important;">
-                    <el-option label="RAPID_SEA" value="RAPID_SEA"></el-option>
-                    <el-option label="SLOW_SEA" value="SLOW_SEA"></el-option>
-                    <el-option label="DRAGON_BOAT" value="DRAGON_BOAT"></el-option>
+                    <el-option label="采购费" value="PURCH_FEE"></el-option>
+                    <el-option label="账期" value="BILL"></el-option>
                   </el-select>
                   <el-input :style="{width: pageWidth * 0.1 + 'px'}"
                             style="border: none; !important; margin-left: 10px !important;"
